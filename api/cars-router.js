@@ -4,7 +4,7 @@ const db = require('../data/db-config')
 const router = express.Router();
 
 // CREATE Requests
-router.post('/', (req,res) => {
+router.post('/', validateCarBody, (req,res) => {
     const newCar = req.body;
     
     db('cars')
@@ -72,5 +72,14 @@ router.delete('/:id', (req,res) => {
 })
 
 //Middleware
+function validateCarBody(req, res, next) {
+    const newCar = req.body;
+
+    if(!newCar.VIN || !newCar.make || !newCar.model || !newCar.mileage) {
+        res.status(400).json({ error: 'Please include a VIN(string), make(string), model(string), and mileage(integer) for this vehicle'})
+    } else {
+        next();
+    }
+}
 
 module.exports = router;
