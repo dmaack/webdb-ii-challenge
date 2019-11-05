@@ -10,7 +10,7 @@ router.post('/', (req,res) => {
     db('cars')
     .insert(newCar)
         .then(add => {
-            res.status(201).json({ message: `You successfully added the car`})
+            res.status(201).json({ message: `Success! You have added a vehile to the database`})
         })
         .catch(err => {
             res.status(500).json({ error: 'Failed to add vehicle'})
@@ -41,8 +41,35 @@ router.get('/:id', (req,res) => {
         })
 })
 // UPDATE Requests
+router.put('/:id', (req,res) => {
+    const id = req.params.id;
+    const updates = req.body;
+
+    db('cars')
+    .where({id: req.params.id})
+    .update(updates)
+        .then(update => {
+            res.status(201).json({ message: `Success! Vehilcle with ID ${id} was updated`})
+        })
+        .catch(err => {
+            res.status(500).json({ error: 'Failed to update the vehicle'})
+        })
+})
 
 // DELETE Requests
+router.delete('/:id', (req,res) => {
+    const id = req.params.id;
+
+    db('cars')
+    .where({id: req.params.id})
+    .del()
+    .then(remove => {
+        res.status(201).json({ message: `Success! Vehile with ID ${id} was deleted`})
+    })
+    .catch(err => {
+        res.status(500).json({ error: ''})
+    })
+})
 
 //Middleware
 
